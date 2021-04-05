@@ -58,5 +58,66 @@ module.exports = {
                 })
             }
         }
+    },
+    getElections: async (req, res) => {
+        election.findAll()
+        .then(rawElections => {
+            if (rawElections.length === 0) {
+                res.status(200).json({
+                    elections: []
+                })
+            } else {
+                return rawElections.map(rawElection => rawElection.dataValues)
+            }
+        })
+        .then(elections => {
+            const electionsData = elections.map(election => {
+                delete election.updatedAt;
+                delete election.createdAt;
+                return election
+            })
+            res.status(200).json({
+                elections: electionsData
+            })
+        })
+        .catch(err => {
+            if (err) {
+                res.status(500).json({
+                    message: "Internal server error!"
+                })
+            }
+        })
+    },
+    getCandidates: async (req, res) => {
+        const { electionId } = req.body;
+        candidate.findAll({
+            where: {
+                electionId: electionId
+            }
+        })
+        .then(rawCandidates => {
+            if (rawCandidates.length === 0) {
+                res.status(404).json({
+                    message: 'Not found'
+                })
+            } else {
+                const candidates = rawCandidates.map(rawCandidate => rawCandidate.dataValues)
+                const candidatesData = candidates.map(candidate => {
+                    delete candidate.updatedAt;
+                    delete candidate.createdAt;
+                    return candidate
+                })
+                res.status(200).json({
+                    candidatesData
+                })
+            }
+        })
+        .catch(err => {
+            if (err) {
+                res.status(500).json({
+                    message: "Internal server error!"
+                })
+            }
+        })
     }
 }
