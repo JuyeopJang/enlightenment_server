@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const parser = bodyParser.urlencoded({
-    extended: false
-})
+router.use(bodyParser.json())
 const opinionController = require('../controllers/OpinionController');
 
 router.get('/comments', opinionController.getComments);
