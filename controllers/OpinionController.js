@@ -27,6 +27,9 @@ module.exports = {
                     candidateId: candidateId,
                     userId: userInfo.id
                 })
+                res.status(201).json({
+                    message: 'Successfully created!'
+                })
             }
         }
     }
