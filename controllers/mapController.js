@@ -29,18 +29,27 @@ module.exports = {
                     message: 'Not found'
                 })
             } else {
-                // let result = electionsJson.response.body.items.item.filter(election => {
-                //     const gijun = yyyymmdd - election.sgId['_text']
-                //     return gijun >= 300 && gijun <= 9100 
-                // })
-                res.status(200).json(electionsJson.response.body.items.item.map(item => {
-                    return {
-                        id: item.num['_text'],
-                        sgId: item.sgId['_text'],
-                        sgName: item.sgName['_text'],
-                        sgTypecode: item.sgTypecode['_text']
+                const result = []
+                // sgcode sgId 
+                electionsJson.response.body.items.item.forEach((item) => {
+                    if (item.sgTypecode['_text'] === '0') {
+                        result.push({
+                            id: item.num['_text'],
+                            sgId: item.sgId['_text'],
+                            sgName: item.sgName['_text'],
+                            sgTypecode: item.sgTypecode['_text'],
+                            downElections: []   
+                        })
+                    } else {
+                        result[result.length - 1].downElections.push({
+                            id: item.num['_text'],
+                            sgId: item.sgId['_text'],
+                            sgName: item.sgName['_text'],
+                            sgTypecode: item.sgTypecode['_text']
+                        })
                     }
-                }))
+                })
+                res.status(200).json(result)
             }
         })
     },

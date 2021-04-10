@@ -112,14 +112,25 @@ module.exports = {
                         message: 'Not found'
                     })
                 } else {
-                    res.status(200).json(placesJson.response.body.items.item.map(item => {
-                        return {
-                            id: item.num['_text'],
-                            sggName: item.sggName['_text'],
-                            sdName: item.sdName['_text'],
-                            wiwName: item.wiwName['_text']
-                        }
-                    }))
+                    if (Array.isArray(placesJson.response.body.items.item)) {
+                        res.status(200).json(placesJson.response.body.items.item.map(item => {
+                            return {
+                                id: item.num['_text'],
+                                sggName: item.sggName['_text'],
+                                sdName: item.sdName['_text'],
+                                wiwName: item.wiwName['_text']
+                            }
+                        }))
+                    } else {
+                        res.status(200).json([
+                            {
+                                id: placesJson.response.body.items.item.num['_text'],
+                                sggName: placesJson.response.body.items.item.sggName['_text'],
+                                sdName: placesJson.response.body.items.item.sdName['_text'],
+                                wiwName: ''
+                            }
+                        ])
+                    }
                 }
             });
         } else {
