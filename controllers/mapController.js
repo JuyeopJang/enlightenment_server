@@ -24,12 +24,24 @@ module.exports = {
                     spaces: 4
                 })
             )
-            let result = electionsJson.response.body.items.item.filter(election => {
-                return yyyymmdd - election.sgId['_text'] >= 1 
-            }) 
-            res.json({
-                elections: result
-            })
+            if (electionsJson.result) {
+                res.status(404).json({
+                    message: 'Not found'
+                })
+            } else {
+                // let result = electionsJson.response.body.items.item.filter(election => {
+                //     const gijun = yyyymmdd - election.sgId['_text']
+                //     return gijun >= 300 && gijun <= 9100 
+                // })
+                res.status(200).json(electionsJson.response.body.items.item.map(item => {
+                    return {
+                        id: item.num['_text'],
+                        sgId: item.sgId['_text'],
+                        sgName: item.sgName['_text'],
+                        sgTypecode: item.sgTypecode['_text']
+                    }
+                }))
+            }
         })
     },
     getPlaces: async (req, res) => {
@@ -53,10 +65,28 @@ module.exports = {
                         spaces: 4
                     })
                 )
-                res.json(placesJson.response.body.items.item)
+                if (placesJson.result) {
+                    res.status(404).json({
+                        message: 'Not found'
+                    })
+                } else {
+                    res.status(200).json(placesJson.response.body.items.item.map(item => {
+                        return {
+                            id: item.num['_text'],
+                            placeName: item.placeName['_text'],
+                            sdName: item.sdName['_text'],
+                            wiwName: item.wiwName['_text'],
+                            emdName: item.emdName['_text'],
+                            addr: item.addr['_text']
+                        }
+                    }))
+                }
+
             });
         } else {
-            res.json([])
+            res.status(400).json({
+                message: 'post correct info'
+            })
         }
     }
 }
