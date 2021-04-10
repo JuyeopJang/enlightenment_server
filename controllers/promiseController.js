@@ -6,8 +6,9 @@ const request = require('request');
 
 module.exports = {
     getCandidates: async (req, res) => {
+        // console.log(req.headers)
         let { sgId, sgTypecode } = req.body
-        if (sgId && sgTypecode) {
+        if (sgId && sgTypecode) {   
             let url = 'http://apis.data.go.kr/9760000/PofelcddInfoInqireService/getPofelcddRegistSttusInfoInqire';
             let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + process.env.SERVICEKEY; /* Service Key*/
             queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
