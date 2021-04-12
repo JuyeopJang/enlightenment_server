@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   user.init({
-    accessToken: DataTypes.STRING
+    googleId: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'user',
