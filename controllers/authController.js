@@ -20,9 +20,7 @@ module.exports = {
     },
     redirect: async (req, res) => {
         if (req.user) {
-            res.status(200).json({
-                accessToken: req.user
-            })
+            res.status(302).redirect('http://localhost:3000')
         } else {
             res.status(401).json({
                 message: 'Invalid User'

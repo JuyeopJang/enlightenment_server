@@ -13,14 +13,22 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { user } = require('./models')
 
-app.use(session({ secret: 'SECRET_CODE', resave: true, saveUninitialized: false }));
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+app.use(session({ 
+  secret: 'SECRET_CODE', 
+  resave: false, 
+  saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new GoogleStrategy({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
-    callbackURL: "http://localhost:5000/auth/google/redirect"
+    callbackURL: "http://localhost:5000/auth/google/login"
   },
   (accessToken, refreshToken, profile, cb) => {
     user.findOne({
@@ -50,14 +58,14 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser((accessToken, done) => {
+  console.log('serial ', accessToken)
   done(null, accessToken);
 });
 passport.deserializeUser((accessToken, done) => {
-  // console.log('deserializedUser', user)
+  console.log('deserial ', accessToken)
   done(null, accessToken);
 });
 
-app.use(cors());
 app.use('/', opinionRouter);
 app.use('/map', mapRouter);
 app.use('/promises', promiseRouter);
