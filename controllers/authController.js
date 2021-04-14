@@ -1,13 +1,10 @@
-const { user } = require('../models')
-const passport = require('passport')
+const { user } = require('../models');
+const passport = require('passport');
 module.exports = {
     logout: async (req, res) => {
-
-        // const authorization = req.headers['authorization'];
-        // // 왜 authorization.split을 사용하는지, 왜 1번째 인덱스의 값을 얻는지 console.log를
-        // // 사용해 확인해보세요!
-        // const token = authorization.split(' ')[1];
-        if (req.isAuthenticated()) {
+        if (req.isAuthenticated() && req.cookies.accessToken === req.user.accessToken) {
+            res.clearCookie('accessToken')
+            res.clearCookie('userId')
             req.logout()
             res.status(200).json({
                 message: 'Successfully logout!'
@@ -20,6 +17,10 @@ module.exports = {
     },
     redirect: async (req, res) => {
         if (req.user) {
+            res.cookie('userId', req.user.userId)
+            res.cookie('accessToken', req.user.accessToken, {
+                expires: new Date(Date.now() + 24 * 3600000) // cookie will be removed after 8 hours
+            })
             res.status(302).redirect('http://localhost:3000')
         } else {
             res.status(401).json({

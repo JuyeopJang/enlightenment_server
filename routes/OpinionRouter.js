@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 router.use(bodyParser.json())
-const opinionController = require('../controllers/OpinionController');
+const opinionController = require('../controllers/opinionController');
 
 router.get('/comments', opinionController.getComments);
 router.post('/comment', opinionController.postComment);
-router.get('/elections', opinionController.getElections);
-router.get('/candidates', opinionController.getCandidates);
+router.delete('/comment/:commentId', opinionController.deleteComment);
+router.put('/comment/:commentId', opinionController.updateComment);
+// router.patch('/candidates', opinionController.getCandidates);
 
 module.exports = router;
