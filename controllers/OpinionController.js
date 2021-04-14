@@ -15,6 +15,7 @@ module.exports = {
             })
             .then(opinions => {
                 const comments = opinions.map(opinion => {
+                    delete opinion.userId;
                     delete opinion.updatedAt;
                     return opinion
                 })
@@ -31,117 +32,43 @@ module.exports = {
             })
     },
     postComment: async (req, res) => {
-        const { userId } = req.cookies
-        const { comment, electionName, candidateName } = req.body;
-        if ( userId === req.user.userId && comment && electionName && candidateName ) {
-            const userInfo = await user.findOne({
-                where: {
-                    id: userId
-                }
+        const { comment } = req.body;
+        if (comment) {
+            opinion.create({
+                comment,
+                ban: 0
             })
-            if (!userInfo) {
-                res.status(401).json({
-                    message: 'Invalid user'
-                })
-            } else {
-                opinion.create({
-                    userId,
-                    comment,
-                    electionName,
-                    candidateName
-                })
-                .then(createdOpinion => {
+            .then(createdOpinion => {
+                if (createdOpinion) {
                     const { dataValues } = createdOpinion;
                     delete dataValues.updatedAt
                     res.status(201).json({
                         ...dataValues
                     })
-                })
-                .catch(err => {
-                    if (err) {
-                        res.status(500).json({
-                            message: 'Internal server error'
-                        })
-                    }
-                })
-            }
+                }
+            })
+            .catch(err => {
+                if (err) {
+                    res.status(500).json({
+                        message: 'Internal server error'
+                    })
+                }
+            })
         } else {
             res.status(400).json({
                 message: 'body data required'
             })
         }
     },
-    // getElections: async (req, res) => {
-    //     election.findAll()
-    //     .then(rawElections => {
-    //         if (rawElections.length === 0) {
-    //             res.status(200).json({
-    //                 elections: []
-    //             })
-    //         } else {
-    //             return rawElections.map(rawElection => rawElection.dataValues)
-    //         }
-    //     })
-    //     .then(elections => {
-    //         const electionsData = elections.map(election => {
-    //             delete election.updatedAt;
-    //             delete election.createdAt;
-    //             return election
-    //         })
-    //         res.status(200).json({
-    //             elections: electionsData
-    //         })
-    //     })
-    //     .catch(err => {
-    //         if (err) {
-    //             res.status(500).json({
-    //                 message: "Internal server error!"
-    //             })
-    //         }
-    //     })
-    // },
-    // getCandidates: async (req, res) => {
-    //     const { electionId } = req.body;
-    //     candidate.findAll({
-    //         where: {
-    //             electionId: electionId
-    //         }
-    //     })
-    //     .then(rawCandidates => {
-    //         if (rawCandidates.length === 0) {
-    //             res.status(404).json({
-    //                 message: 'Not found'
-    //             })
-    //         } else {
-    //             const candidates = rawCandidates.map(rawCandidate => rawCandidate.dataValues)
-    //             const candidatesData = candidates.map(candidate => {
-    //                 delete candidate.updatedAt;
-    //                 delete candidate.createdAt;
-    //                 return candidate
-    //             })
-    //             res.status(200).json({
-    //                 candidatesData
-    //             })
-    //         }
-    //     })
-    //     .catch(err => {
-    //         if (err) {
-    //             res.status(500).json({
-    //                 message: "Internal server error!"
-    //             })
-    //         }
-    //     })
-    // },
     deleteComment: async (req, res) => {
-        const { userId } = req.cookies;
-        if ( userId === req.user.userId ) {
-            const { commentId } = req.params;
-            const deletedComment = await opinion.findOne({
-                where: {
-                    id: commentId
-                }
-            })
-            if (deletedComment) {
+        const { commentId } = req.params;
+        const deletedComment = await opinion.findOne({
+            where: {
+                id: commentId
+            }
+        })
+        if (deletedComment) {
+            if (deletedComment.dataValues.ban >= 5) {
                 await opinion.destroy({
                     where: {
                       id: Number(commentId)
@@ -152,30 +79,26 @@ module.exports = {
                 })
             } else {
                 res.status(400).json({
-                    message: 'commentId is not correct'
+                    message: 'you should request update endpoint'
                 })
             }
         } else {
-            res.status(401).json({
-                message: 'Invalid user'
+            res.status(404).json({
+                message: 'send proper commentId'
             })
         }
     },
     updateComment: async (req, res) => {
-        const { userId } = req.cookies;
-        const { newComment, newElectionName, newCandidateName } = req.body;
-        if ( userId === req.user.userId && newComment && newElectionName && newCandidateName ) {
-            const { commentId } = req.params;
-            const updatedComment = await opinion.findOne({
-                where: {
-                    id: commentId
-                }
-            })
-            if (updatedComment) {
+        const { commentId } = req.params;
+        const updatedComment = await opinion.findOne({
+            where: {
+                id: commentId
+            }
+        })
+        if (updatedComment) {
+            if (updatedComment.dataValues.ban < 5) {
                 await opinion.update({
-                    comment: newComment,
-                    electionName: newElectionName,
-                    candidateName: newCandidateName
+                    ban: updatedComment.dataValues.ban + 1
                 }, {
                     where: {
                       id: commentId
@@ -186,12 +109,12 @@ module.exports = {
                 })
             } else {
                 res.status(400).json({
-                    message: 'commentId is not correct'
+                    message: 'you should request delete endpoint'
                 })
             }
         } else {
-            res.status(401).json({
-                message: 'Invalid user'
+            res.status(404).json({
+                message: 'send proper commentId'
             })
         }
     }
