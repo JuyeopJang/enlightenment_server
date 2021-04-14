@@ -34,15 +34,15 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-const { candidate, opinion, user, election } = sequelize.models;
+const { opinion, user } = sequelize.models;
 
 user.hasMany(opinion);
 opinion.belongsTo(user);
 
-candidate.hasMany(opinion);
-opinion.belongsTo(candidate);
+// candidate.hasMany(opinion);
+// opinion.belongsTo(candidate);
 
-election.hasMany(candidate);
-candidate.belongsTo(election);
+// election.hasMany(candidate);
+// candidate.belongsTo(election);
 
 module.exports = db;
