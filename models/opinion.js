@@ -15,9 +15,11 @@ module.exports = (sequelize, DataTypes) => {
   };
   opinion.init({
     userId: DataTypes.INTEGER,
-    comment: DataTypes.STRING,
-    electionName: DataTypes.STRING,
-    candidateName: DataTypes.STRING
+    ban: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    comment: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'opinion',

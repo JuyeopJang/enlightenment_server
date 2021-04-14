@@ -2,12 +2,12 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.addColumn('opinions', 'electionName', Sequelize.STRING)
-    queryInterface.addColumn('opinions', 'candidateName', Sequelize.STRING)
+    await queryInterface.addColumn('opinions', 'ban', Sequelize.INTEGER, {
+      defaultValue: 0
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('opinions', 'candidateName')
-    await queryInterface.removeColumn('opinions', 'electionName')
+    await queryInterface.removeColumn('opinions', 'ban');
   }
 };
