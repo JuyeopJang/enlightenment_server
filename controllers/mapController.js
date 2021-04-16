@@ -5,7 +5,7 @@ const convert = require('xml-js');
 const request = require('request');
 
 module.exports = {
-    getElections: async (req, res) => {
+    getElections: async (req, res) => { 
         //오늘 날짜랑 비교해서 이후의 선거목록만 전달하기!
         const electionCodeUrl = `http://apis.data.go.kr/9760000/CommonCodeService/getCommonSgCodeList?ServiceKey=${process.env.SERVICEKEY}&numOfRows=100`
         axios.get(electionCodeUrl)

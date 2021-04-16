@@ -1,19 +1,25 @@
-const axios = require('axios')
+const axios = require('axios');
 const dotenv = require('dotenv');
-dotenv.config()
+dotenv.config();
 const convert = require('xml-js');
 const request = require('request');
 
 module.exports = {
     getCandidates: async (req, res) => {
-        let { sgId, sgTypecode } = req.body
-        if (sgId && sgTypecode) {
+        // console.log(req.headers)
+        let { sgId, sgTypecode, sdName, sggName } = req.body
+        if (sgId && sgTypecode) {   
+            
             let url = 'http://apis.data.go.kr/9760000/PofelcddInfoInqireService/getPofelcddRegistSttusInfoInqire';
+            // let url = 'http://apis.data.go.kr/9760000/WinnerInfoInqireService2/getWinnerInfoInqire'
             let queryParams = '?' + encodeURIComponent('ServiceKey') + '=' + process.env.SERVICEKEY; /* Service Key*/
             queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
             queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('2000'); /* */
             queryParams += '&' + encodeURIComponent('sgId') + '=' + encodeURIComponent(sgId); /* */
             queryParams += '&' + encodeURIComponent('sgTypecode') + '=' + encodeURIComponent(sgTypecode); /* */
+            queryParams += '&' + encodeURIComponent('sdName') + '=' + encodeURIComponent(sdName); /* */
+            queryParams += '&' + encodeURIComponent('sggName') + '=' + encodeURIComponent(sggName); /* */
+            console.log(url+queryParams)
             request({
                 url: url + queryParams,
                 method: 'GET'
