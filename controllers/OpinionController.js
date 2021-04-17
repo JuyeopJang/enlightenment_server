@@ -1,5 +1,4 @@
-const { opinion, user } = require('../models');
-// const { delete } = require('../routes/OpinionRouter');
+const { opinion } = require('../models');
 
 module.exports = {
     getComments: async (req, res) => {

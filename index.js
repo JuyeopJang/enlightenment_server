@@ -6,11 +6,13 @@ const opinionRouter = require('./routes/opinionRouter');
 const mapRouter = require('./routes/mapRouter');
 const promiseRouter = require('./routes/promiseRouter');
 const authRouter = require('./routes/authRouter');
+const magazineRouter = require('./routes/magazineRouter');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { user } = require('./models');
-const methodOverride = require('method-override');
+// const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv');
 dotenv.config();
@@ -55,7 +57,7 @@ passport.use(new GoogleStrategy({
         .then(createdUser => {
           if (createdUser) return cb(null, {
             accessToken,
-            userId: currentUser.dataValues.id
+            userId: createdUser.dataValues.id
           });
         })
         .catch(err => {
@@ -78,10 +80,12 @@ passport.deserializeUser((userInfo, done) => {
   done(null, userInfo);
 });
 
+app.use(bodyParser.json())
 app.use('/', opinionRouter);
 app.use('/map', mapRouter);
 app.use('/promises', promiseRouter);
-app.use('/auth', authRouter)
+app.use('/auth', authRouter);
+app.use('/magazines', magazineRouter);
 
 app.listen(port, () => {
   console.log(`server is starting on ${port}`)

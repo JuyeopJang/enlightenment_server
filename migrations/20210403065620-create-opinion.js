@@ -11,10 +11,12 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER
       },
-      candidateId: {
+      ban: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       comment: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {

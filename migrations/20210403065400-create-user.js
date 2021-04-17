@@ -8,7 +8,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      accessToken: {
+      googleId: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
