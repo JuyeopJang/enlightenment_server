@@ -35,7 +35,8 @@ module.exports = {
         if (comment) {
             opinion.create({
                 comment,
-                ban: 0
+                ban: 0,
+                like: 0
             })
             .then(createdOpinion => {
                 if (createdOpinion) {
@@ -87,7 +88,7 @@ module.exports = {
             })
         }
     },
-    updateComment: async (req, res) => {
+    updateCommentBan: async (req, res) => {
         const { commentId } = req.params;
         const updatedComment = await opinion.findOne({
             where: {
@@ -111,6 +112,30 @@ module.exports = {
                     message: 'you should request delete endpoint'
                 })
             }
+        } else {
+            res.status(404).json({
+                message: 'send proper commentId'
+            })
+        }
+    },
+    updateCommentLike: async (req, res) => {
+        const { commentId } = req.params;
+        const updatedComment = await opinion.findOne({
+            where: {
+                id: commentId
+            }
+        })
+        if (updatedComment) {
+            await opinion.update({
+                like: updatedComment.dataValues.like + 1
+            }, {
+                where: {
+                  id: commentId
+                }
+            });
+            res.status(200).json({
+                message: 'Successfully updated'
+            })
         } else {
             res.status(404).json({
                 message: 'send proper commentId'

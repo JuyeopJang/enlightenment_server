@@ -34,8 +34,10 @@ const upload = multer({
 
 //isValidUser.hasCookies,
 router.get('/', magazineController.getMagazines);
-router.post('/', upload.array('images'), magazineController.createMagazine);
-router.put('/:magazineId', isValidUser.hasCookies, upload.array('images'), magazineController.patchMagazine);
-router.delete('/:magazineId', magazineController.deleteMagazine);
+router.post('/', isValidUser.hasCookies, magazineController.createMagazine);
+router.put('/:magazineId', isValidUser.hasCookies, magazineController.patchMagazine);
+//수정 필요!
+router.delete('/:magazineId', isValidUser.hasCookies, magazineController.deleteMagazine);
+router.post('/images', upload.single("upload"), magazineController.uploadImage)
 
 module.exports = router;

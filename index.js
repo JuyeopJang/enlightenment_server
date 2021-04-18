@@ -20,11 +20,12 @@ dotenv.config();
 // app.use(methodOverride('X-HTTP-Method-Override', {
 //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 // }));
-app.use(cookieParser());
 app.use(cors({
   origin: 'http://localhost:3000',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true
 }));
+app.use(cookieParser());
 app.use(session({ 
   secret: 'SECRET_CODE', 
   resave: false, 
@@ -72,15 +73,16 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser((userInfo, done) => {
-  console.log('serial ', userInfo)
+  // console.log('serial ', userInfo)
   done(null, userInfo);
 });
 passport.deserializeUser((userInfo, done) => {
-  console.log('deserial ', userInfo)
+  // console.log('deserial ', userInfo)
   done(null, userInfo);
 });
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', opinionRouter);
 app.use('/map', mapRouter);
 app.use('/promises', promiseRouter);
