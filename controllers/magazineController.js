@@ -40,31 +40,10 @@ module.exports = {
                 score: 0,
                 count: 0
             })
-            const imagesInfo = req.files;
-            if (imagesInfo.length !== 0) {
-                const imagesPath = imagesInfo.map(image => {
-                    return {
-                        url: image.location,
-                        magazineId: createdMagazine.dataValues.id
-                    }
-                });
-                
-                const images = await image.bulkCreate(imagesPath)
-                if (images[0].dataValues.id) {
-                    res.status(201).json({
-                        message: 'Successfully created!'
-                    })
-                } else {
-                    res.status(500).json({
-                        message: 'Server error has occurred!'
-                    })
-                }
-                
-            } else {
-                res.status(201).json({
-                    message: 'Successfully created but images are none'
-                })
-            }
+            delete createdMagazine.dataValues.updatedAt
+            res.status(201).json({
+                ...createdMagazine.dataValues
+            })
         } else {
             res.status(400).json({
                 message: "제목과 본문은 필수 항목입니다!"
@@ -91,6 +70,13 @@ module.exports = {
             res.status(400).json({
                 message: 'send proper magazineId'
             })
+        }
+    },
+    uploadImage: async (req, res) => {
+        if (req.file) {
+            res.json({ uploaded: true, url: req.file.location });
+        } else {
+            res.status(500).json({uploaded: false, error: new Error('Image was not uploaded!')});
         }
     }
 }
