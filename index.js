@@ -21,7 +21,7 @@ dotenv.config();
 //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 // }));
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://www.kelection.ml'],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true
 }));

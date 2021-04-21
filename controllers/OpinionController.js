@@ -96,22 +96,16 @@ module.exports = {
             }
         })
         if (updatedComment) {
-            if (updatedComment.dataValues.ban < 5) {
-                await opinion.update({
-                    ban: updatedComment.dataValues.ban + 1
-                }, {
-                    where: {
-                      id: commentId
-                    }
-                });
-                res.status(200).json({
-                    message: 'Successfully updated'
-                })
-            } else {
-                res.status(400).json({
-                    message: 'you should request delete endpoint'
-                })
-            }
+            await opinion.update({
+                ban: updatedComment.dataValues.ban + 1
+            }, {
+                where: {
+                  id: commentId
+                }
+            });
+            res.status(200).json({
+                message: 'Successfully updated'
+            })
         } else {
             res.status(404).json({
                 message: 'send proper commentId'
