@@ -17,11 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     description: DataTypes.STRING,
-    score: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    },
-    count: {
+    like: {
       type: DataTypes.INTEGER,
       defaultValue: 0
     }

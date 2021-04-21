@@ -2,7 +2,6 @@ const { user, magazine, image } = require('../models');
 
 module.exports = {
     getMagazines: async (req, res) => {
-        console.log(req.user)
         const magazinesImages = await magazine.findAll({
             include: [{
             model: image,
@@ -77,6 +76,30 @@ module.exports = {
             res.json({ uploaded: true, url: req.file.location });
         } else {
             res.status(500).json({uploaded: false, error: new Error('Image was not uploaded!')});
+        }
+    },
+    updateMagazineLike: async (req, res) => {
+        const { magazineId } = req.params;
+        const updatedMagazine = await magazine.findOne({
+            where: {
+                id: magazineId
+            }
+        })
+        if (updatedMagazine) {
+            await magazine.update({
+                like: updatedComment.dataValues.like + 1
+            }, {
+                where: {
+                  id: magazineId
+                }
+            });
+            res.status(200).json({
+                message: 'Successfully updated'
+            })
+        } else {
+            res.status(404).json({
+                message: 'send proper commentId'
+            })
         }
     }
 }

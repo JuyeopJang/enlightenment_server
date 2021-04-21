@@ -20,11 +20,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      score: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      count: {
+      like: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
