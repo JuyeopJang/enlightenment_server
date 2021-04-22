@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   magazine.init({
     userId: DataTypes.INTEGER,
     title: DataTypes.STRING,
-    description: DataTypes.STRING,
+    description: DataTypes.TEXT,
     like: {
       type: DataTypes.INTEGER,
       defaultValue: 0

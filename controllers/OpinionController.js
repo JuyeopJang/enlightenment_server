@@ -60,34 +60,6 @@ module.exports = {
             })
         }
     },
-    deleteComment: async (req, res) => {
-        const { commentId } = req.params;
-        const deletedComment = await opinion.findOne({
-            where: {
-                id: commentId
-            }
-        })
-        if (deletedComment) {
-            if (deletedComment.dataValues.ban >= 5) {
-                await opinion.destroy({
-                    where: {
-                      id: Number(commentId)
-                    }
-                })
-                res.status(200).json({
-                    message: 'Successfully deleted'
-                })
-            } else {
-                res.status(400).json({
-                    message: 'you should request update endpoint'
-                })
-            }
-        } else {
-            res.status(404).json({
-                message: 'send proper commentId'
-            })
-        }
-    },
     updateCommentBan: async (req, res) => {
         const { commentId } = req.params;
         const updatedComment = await opinion.findOne({

@@ -1,9 +1,11 @@
 module.exports = {
     logout: async (req, res) => {
         if (req.isAuthenticated() && req.cookies.accessToken === req.user.accessToken) {
-            res.clearCookie('accessToken')
-            res.clearCookie('userId')
-            req.logout()
+            res.clearCookie('accessToken');
+            res.clearCookie('userId');
+            res.clearCookie('photo');
+            res.clearCookie('email');
+            req.logout();
             res.status(200).json({
                 message: 'Successfully logout!'
             })
@@ -15,7 +17,7 @@ module.exports = {
     },
     redirect: async (req, res) => {
         if (req.user) {
-            console.log(req.user)
+            // console.log(req.user)
             res.cookie('userId', req.user.userId, {
                 expires: new Date(Date.now() + 24 * 3600000) 
             })
