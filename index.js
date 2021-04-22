@@ -3,23 +3,16 @@ const cors = require('cors');
 const app = express();
 const port = 5000;
 const opinionRouter = require('./routes/opinionRouter');
-const mapRouter = require('./routes/mapRouter');
-const promiseRouter = require('./routes/promiseRouter');
 const authRouter = require('./routes/authRouter');
 const magazineRouter = require('./routes/magazineRouter');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { user } = require('./models');
-// const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv');
 dotenv.config();
-
-// app.use(methodOverride('X-HTTP-Method-Override', {
-//   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
-// }));
 app.use(cors({
   origin: ['http://localhost:3000', 'http://www.kelection.ml'],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -49,16 +42,22 @@ passport.use(new GoogleStrategy({
       if (currentUser) {
         return cb(null, {
           accessToken,
-          userId: currentUser.dataValues.id
+          userId: currentUser.dataValues.id,
+          photo: currentUser.dataValues.photo,
+          email: currentUser.dataValues.email
         });
       } else {
         user.create({
-          googleId: profile.id
+          googleId: profile.id,
+          photo: profile.photos[0].value,
+          email: profile.emails[0].value
         })
         .then(createdUser => {
           if (createdUser) return cb(null, {
             accessToken,
-            userId: createdUser.dataValues.id
+            userId: createdUser.dataValues.id,
+            photo: createdUser.dataValues.photo,
+            email: createdUser.dataValues.email
           });
         })
         .catch(err => {
@@ -83,10 +82,8 @@ passport.deserializeUser((userInfo, done) => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/', opinionRouter);
-app.use('/map', mapRouter);
-app.use('/promises', promiseRouter);
 app.use('/auth', authRouter);
+app.use('/', opinionRouter);
 app.use('/magazines', magazineRouter);
 
 app.listen(port, () => {
