@@ -12,7 +12,7 @@ const { user } = require('./models');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv');
-const ec2Url = 'http://ec2-3-34-52-239.ap-northeast-2.compute.amazonaws.com'
+const ec2Url = 'http://ec2-3-34-52-239.ap-northeast-2.compute.amazonaws.com:5000'
 dotenv.config();
 app.use(cors({
   origin: ['http://localhost:3000', 'http://www.kelection.ml'],
