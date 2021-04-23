@@ -26,10 +26,6 @@ module.exports = {
                 expires: new Date(Date.now() + 24 * 3600000), 
                 sameSite: true    
             }),
-            res.cookie('photo', req.user.photo, {
-                expires: new Date(Date.now() + 24 * 3600000),
-                sameSite: true 
-            }),
             res.cookie('email', req.user.email, {
                 expires: new Date(Date.now() + 24 * 3600000),
                 sameSite: true 
