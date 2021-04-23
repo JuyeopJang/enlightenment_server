@@ -22,7 +22,10 @@ app.use(cookieParser());
 app.use(session({ 
   secret: 'SECRET_CODE', 
   resave: false, 
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    sameSite: true
+  }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
