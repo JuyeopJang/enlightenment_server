@@ -55,6 +55,7 @@ module.exports = {
     },
     deleteMagazine: async (req, res) => {
         const { magazineId } = req.params;
+        console.log(magazineId)
         const deletedMagazine = await magazine.findByPk(Number(magazineId))
         if (deletedMagazine) {
             await magazine.destroy({
@@ -87,7 +88,7 @@ module.exports = {
         })
         if (updatedMagazine) {
             await magazine.update({
-                like: updatedComment.dataValues.like + 1
+                like: updatedMagazine.dataValues.like + 1
             }, {
                 where: {
                   id: magazineId
