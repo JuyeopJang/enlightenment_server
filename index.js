@@ -12,6 +12,7 @@ const { user } = require('./models');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv');
+const ec2Url = 'http://ec2-3-34-52-239.ap-northeast-2.compute.amazonaws.com'
 dotenv.config();
 app.use(cors({
   origin: ['http://localhost:3000', 'http://www.kelection.ml'],
@@ -33,7 +34,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
-    callbackURL: "http://localhost:5000/auth/google/login"
+    callbackURL: `${ec2Url}/auth/google/login`
   },
   (accessToken, refreshToken, profile, cb) => {
     user.findOne({

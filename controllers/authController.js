@@ -38,7 +38,7 @@ module.exports = {
             // userId와 accessToken 이란 이름으로 2개의 쿠키를 만들어 내려줌
             // userId는 왜? 매거진을 쓰고 수정 삭제할때 보내야함!
             // 기한은 하루! 하루가 지나면 없어지고 클라는 쿠키가 없기때문에 로그아웃된 상태로 인식하겠지!
-            res.status(302).redirect('http://localhost:3000')
+            res.status(302).redirect('http://www.kelection.ml')
         } else {
             res.status(401).json({
                 message: 'Invalid User'
