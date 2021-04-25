@@ -12,10 +12,9 @@ const { user } = require('./models');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv');
-const ec2Url = 'http://ec2-3-34-52-239.ap-northeast-2.compute.amazonaws.com:5000'
 dotenv.config();
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://www.kelection.ml'],
+  origin: 'https://www.kelection.ml',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true
 }));
@@ -25,7 +24,11 @@ app.use(session({
   resave: false, 
   saveUninitialized: false,
   cookie: {
-    sameSite: true
+    domain: 'kelection.ml',
+    expires: new Date(Date.now() + 24 * 3600000),
+    sameSite: 'none',
+    path: '/',
+    secure: true
   }
 }));
 app.use(passport.initialize());
@@ -34,7 +37,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
-    callbackURL: "http://www.kelection.ml/auth/google/login"
+    callbackURL: "https://www.enlightenment.ga/auth/google/login"
   },
   (accessToken, refreshToken, profile, cb) => {
     user.findOne({
