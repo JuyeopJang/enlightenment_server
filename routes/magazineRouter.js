@@ -13,7 +13,6 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.AWS_SECRET_KEY, //노출주의
     region: process.env.AWS_REGION, //노출주의
 });
-//console.log(s3.deleteObject)
 
 const storage = multerS3({ 
     s3: s3,
@@ -32,13 +31,11 @@ const upload = multer({
     storage: storage
 })
 
-//isValidUser.hasCookies,
 router.get('/', magazineController.getMagazines);
 router.post('/images', upload.single("upload"), magazineController.uploadImage)
 router.post('/', isValidUser.hasCookies, magazineController.createMagazine);
-router.put('/:magazineId', isValidUser.hasCookies, magazineController.patchMagazine);
-//수정 필요!
 router.put('/:magazineId/like', magazineController.updateMagazineLike)
+router.put('/:magazineId/dislike', magazineController.updateMagazineDisLike)
 router.delete('/:magazineId', isValidUser.hasCookies, magazineController.deleteMagazine);
 
 module.exports = router;

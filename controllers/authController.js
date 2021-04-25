@@ -3,7 +3,6 @@ module.exports = {
         if (req.isAuthenticated() && req.cookies.accessToken === req.user.accessToken) {
             res.clearCookie('accessToken');
             res.clearCookie('userId');
-            res.clearCookie('photo');
             res.clearCookie('email');
             req.logout();
             res.status(200).json({
@@ -22,25 +21,19 @@ module.exports = {
                 domain: 'kelection.ml',
                 expires: new Date(Date.now() + 24 * 3600000),
                 sameSite: true,
-                path: "/" 
+                path: '/'
             })
             res.cookie('accessToken', req.user.accessToken, {
                 domain: 'kelection.ml',
                 expires: new Date(Date.now() + 24 * 3600000), 
                 sameSite: true,
-                path: "/"    
-            }),
-            res.cookie('photo', req.user.photo, {
-                domain: 'kelection.ml',
-                expires: new Date(Date.now() + 24 * 3600000),
-                sameSite: true,
-                path: "/" 
+                path: '/'    
             }),
             res.cookie('email', req.user.email, {
                 domain: 'kelection.ml',
                 expires: new Date(Date.now() + 24 * 3600000),
                 sameSite: true,
-                path: "/" 
+                path: '/' 
             }),
             // 리다이렉트를 시키기때문에 쿠키로밖에 내려줄 수 없는 상황!
             // userId와 accessToken 이란 이름으로 2개의 쿠키를 만들어 내려줌

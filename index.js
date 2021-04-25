@@ -34,7 +34,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
-    callbackURL: `${ec2Url}/auth/google/login`
+    callbackURL: "http://www.kelection.ml/auth/google/login"
   },
   (accessToken, refreshToken, profile, cb) => {
     user.findOne({

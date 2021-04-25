@@ -49,11 +49,11 @@ module.exports = {
             })
         }
     },
-    patchMagazine: async (req, res) => {
-        const { magazineId } = req.params;
-        res.send(magazineId)
-    },
-    deleteMagazine: async (req, res) => {
+    // patchMagazine: async (req, res) => {
+    //     const { magazineId } = req.params;
+    //     res.send(magazineId)
+    // },
+    deleteMagazine: async (req, res) => {   
         const { magazineId } = req.params;
         const deletedMagazine = await magazine.findByPk(Number(magazineId))
         if (deletedMagazine) {
@@ -88,6 +88,30 @@ module.exports = {
         if (updatedMagazine) {
             await magazine.update({
                 like: updatedMagazine.dataValues.like + 1
+            }, {
+                where: {
+                  id: magazineId
+                }
+            });
+            res.status(200).json({
+                message: 'Successfully updated'
+            })
+        } else {
+            res.status(404).json({
+                message: 'send proper commentId'
+            })
+        }
+    },
+    updateMagazineDisLike: async (req, res) => {
+        const { magazineId } = req.params;
+        const updatedMagazine = await magazine.findOne({
+            where: {
+                id: magazineId
+            }
+        })
+        if (updatedMagazine) {
+            await magazine.update({
+                like: updatedMagazine.dataValues.like - 1
             }, {
                 where: {
                   id: magazineId
