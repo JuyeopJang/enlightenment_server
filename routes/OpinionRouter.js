@@ -6,6 +6,5 @@ router.get('/comments', opinionController.getComments);
 router.post('/comment', opinionController.postComment);
 router.put('/comment/:commentId/ban', opinionController.updateCommentBan);
 router.put('/comment/:commentId/like', opinionController.updateCommentLike);
-// router.patch('/candidates', opinionController.getCandidates);
 
 module.exports = router;
