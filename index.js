@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 5000;
-const opinionRouter = require('./routes/opinionRouter');
+const opinionRouter = require('./routes/OpinionRouter');
 const authRouter = require('./routes/authRouter');
 const magazineRouter = require('./routes/magazineRouter');
 const session = require('express-session');
@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv');
 dotenv.config();
 app.use(cors({
-  origin: 'https://www.kelection.ml',
+  origin: 'https://www.yonyeosuk.link',
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true
 }));
@@ -24,7 +24,7 @@ app.use(session({
   resave: false, 
   saveUninitialized: false,
   cookie: {
-    domain: 'kelection.ml',
+    domain: 'yonyeosuk.link',
     expires: new Date(Date.now() + 24 * 3600000),
     sameSite: 'none',
     path: '/',
@@ -37,7 +37,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
-    callbackURL: "https://server.kelection.ml/auth/google/login"
+    callbackURL: "https://server.yonyeosuk.link/auth/google/login"
   },
   (accessToken, refreshToken, profile, cb) => {
     user.findOne({
